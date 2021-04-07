@@ -1,5 +1,6 @@
 package com.delivery.servbytedelivery.services;
 
+import com.delivery.servbytedelivery.dto.SelectServiceProvider;
 import com.delivery.servbytedelivery.exceptions.ApplicationException;
 import com.delivery.servbytedelivery.models.City;
 import com.delivery.servbytedelivery.models.Meal;
@@ -29,16 +30,21 @@ class DeliveryServiceImplTest {
     ServiceProviderRepository serviceProviderRepository;
 
 
-
+    ServiceProvider serviceProvider;
     @BeforeEach
     void setUp() {
-        ServiceProvider serviceProvider = new ServiceProvider();
+        serviceProvider = new ServiceProvider();
         serviceProvider.setCity(City.ABIA);
         ServiceProvider newProvider = new ServiceProvider();
         newProvider.setCity(City.ABIA);
         serviceProviderRepository.save(serviceProvider);
         serviceProviderRepository.save(newProvider);
 
+        Meal rice = new Meal();
+        serviceProvider.setMenu(new Menu());
+        serviceProvider.getMenu().setMeals(new ArrayList<>());
+        serviceProvider.getMenu().getMeals().add(rice);
+        serviceProviderRepository.save(serviceProvider);
 
     }
 
@@ -54,6 +60,10 @@ class DeliveryServiceImplTest {
 
     @Test
     void test_I_Can_View_Menu_Of_Selected_Restaurant(){
+        SelectServiceProvider selectServiceProvider = new SelectServiceProvider();
+        selectServiceProvider.setServiceProvider(serviceProvider);
+        Menu menu = deliveryService.showMenuOfSelectedProvider(selectServiceProvider);
 
+        assertThat(menu.getMeals().size()).isEqualTo(1);
     }
 }

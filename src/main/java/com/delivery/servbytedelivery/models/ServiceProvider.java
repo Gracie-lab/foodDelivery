@@ -16,7 +16,7 @@ public class ServiceProvider {
     private String emailAddress;
     private String phoneNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Menu menu;
 
     @Enumerated(EnumType.ORDINAL)
